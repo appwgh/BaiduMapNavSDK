@@ -1,0 +1,3 @@
+##BaiduMapNavSDK for cocoapods convenience
+
+
