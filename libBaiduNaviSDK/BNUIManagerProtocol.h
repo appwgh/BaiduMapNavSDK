@@ -10,85 +10,86 @@
 #define baiduNaviSDK_BNUIManagerProtocol_h
 
 #import "BNCommonDef.h"
-#import <UIKit/UIWindow.h>
 
-@protocol BNNaviUIManagerDelegate;
+extern NSString* BNaviUI_NormalNavi_TypeKey;
+
+typedef enum _BNaviUIType{
+    BNaviUI_Unknown = 0,
+    BNaviUI_NormalNavi,         //正常导航
+    BNaviUI_Declaration,       //声明页面
+}BNaviUIType;
 
 /**
- *  UI管理协议，进入导航入口
+ 退出UI的两种方式
+ EN_BNavi_ExitTopVC：
+ 退出最顶层的ViewController，如果退出后已经是最底部的controller，退出整个导航组件
+ EN_BNavi_ExitAllVC：
+ 退出整个导航组件
  */
+typedef enum _BNavi_ExitPage_Type {
+    EN_BNavi_ExitTopVC,
+    EN_BNavi_ExitAllVC
+    
+}BNavi_ExitPage_Type;
+
+@protocol BNNaviUIManagerDelegate;
 
 @protocol BNUIManagerProtocol
 
 @required
 
 /**
- *  进入导航页面
- *
- *  @param eType           导航类型：真实导航或者模拟导航
- *  @param delegate        Deleagte
- *  @param isNeedLandscape 是否需要横竖屏切换，默认竖屏
- *
- *  @return YES：进入成功，NO：进入失败
+ * 导航页面的页面栈
  */
-- (BOOL)showNaviUI:(BN_NaviType)eType delegete:(id<BNNaviUIManagerDelegate>)delegate isNeedLandscape:(BOOL)isNeedLandscape;
+- (id)navigationController;
 
 /**
- *  获取导航窗口, acquire the navigation window
- *
- *  @return 导航窗口, navigation window
+ * 展示导航页面
+ * @param pageType  需要展示的页面类型
+ * @param delegate  回调代理
+ * @param extParams 可扩展参数，传nil即可
  */
-- (UIWindow *)getNaviWindow;
-
+- (void)showPage:(BNaviUIType)pageType
+        delegate:(id<BNNaviUIManagerDelegate>)delegate
+       extParams:(NSDictionary*)extParams;
 
 /**
- *  进入电子狗页面
- *
- *  @param isNeedLandscape 是否需要横竖屏切换，默认竖屏
- *  @param delegate        Delegate
- *
- *  @return YES：进入成功，NO：进入失败
+ * 退出导航页面
+ * @param exitType  退出页面的类型，参照BNavi_ExitPage_Type类型说明
+ * @param animated  是否需要展示动画
+ * @param extraInfo 可扩展参数，传nil即可
  */
-- (BOOL)showDigitDogUI:(BOOL)isNeedLandscape delegete:(id<BNNaviUIManagerDelegate>)delegate;
+- (void)exitPage:(BNavi_ExitPage_Type)exitType animated:(BOOL)animated extraInfo:(NSDictionary *)extraInfo;
 
-// 退出导航页面
-- (BOOL)exitNaviUI:(NSDictionary *)userInfo;
+@optional
+
+/**
+ *  是否在导航过程页面
+ */
+- (BOOL)isInNaviPage;
 
 @end
 
 
-/**
- *  导航UI管理器回调
- */
+// 导航UI管理器回调
 @protocol BNNaviUIManagerDelegate <NSObject>
 
 @optional
 
 /**
- *  退出导航页面回调
- *
- *  @param extraInfo 退出导航页面相关信息
+ *  导航页面的调起controller
+ *  可不实现，默认为最上层的controller
  */
--(void)onExitNaviUI:(NSDictionary*)extraInfo;
-
+- (id)naviPresentedViewController;
 
 /**
- *  退出免责声明页面的回调
+ *  退出UI的回调
  *
- *  @param extraInfo 提出免责声明页面相关信息
+ *  @param pageType  UI类型
+ *  @param extraInfo 额外参数
  */
-- (void)onExitexitDeclarationUI:(NSDictionary*)extraInfo;
-
-
-/**
- *  退出电子狗页面的回调
- *
- *  @param extraInfo 退出电子狗页面相关信息
- */
--(void)onExitDigitDogUI:(NSDictionary*)extraInfo;
-
+- (void)onExitPage:(BNaviUIType)pageType  extraInfo:(NSDictionary*)extraInfo;
 
 @end
 
 #endif
-

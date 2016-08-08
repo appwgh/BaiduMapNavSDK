@@ -6,24 +6,31 @@
 //  Copyright (c) 2013 baidu. All rights reserved.
 //
 
+/**
+ *  导航策略管理器协议,包含导航过程中的设置项、电子狗的设置策略以及导航入口记录
+ *
+ */
+
 #ifndef baiduNaviSDK_BNStrategyManagerProtocol_h
 #define baiduNaviSDK_BNStrategyManagerProtocol_h
 
 #import "BNCommonDef.h"
 
-/**
- *  策略管理器
- */
 @protocol BNStrategyManagerProtocol
 
+@required
 
-/**
- *  设置播报模式
- *
- *  @param speakMode 播报模式，默认为BN_Speak_Mode_High（新手模式）
- */
-- (void)setSpeakMode:(BN_Speak_Mode_Enum)speakMode;
+//恢复到默认策略
+- (void)reset;
 
+// 停车场推送
+@property (nonatomic, assign) BOOL parkInfo;
+
+// 日夜模式
+@property (nonatomic, assign) BNDayNight_CFG_Type dayNightType;
+
+// 播报模式
+@property (nonatomic, assign) BN_Speak_Mode_Enum speakMode;
 
 /**
  *  设置路况是否开启，路况开启需要联网，没有网络，开启路况会失败
@@ -32,14 +39,7 @@
  *  @param success     成功的回调
  *  @param fail        失败的回调
  */
-- (void)trySetShowTraffic:(BOOL)showTraffic success:(void (^)(void))success  fail:(void (^)(void))fail;
-
-/**
- *  设置白天黑夜模式
- *
- *  @param dayNightType 白天黑夜模式
- */
-- (void)setDayNightType:(BNDayNight_CFG_Type)dayNightType;
+- (void)trySetShowTrafficInNavi:(BOOL)showTraffic success:(void (^)(void))success  fail:(void (^)(void))fail;
 
 @end
 

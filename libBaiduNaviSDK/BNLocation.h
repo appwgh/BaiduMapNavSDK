@@ -2,19 +2,16 @@
 //  BNLocation.h
 //  baiduNaviSDK
 //
-//  Created by Baidu on 14/12/29.
+//  Created by chenxintao on 14/12/29.
 //  Copyright (c) 2014年 baidu. All rights reserved.
 //
 
 #import <CoreLocation/CLLocation.h>
 
-/**
- *  位置对象，使用外部GPS功能所需要传入的gps对象
- */
 @interface BNLocation : NSObject
 
 /**
- *  wgs84ll格式的经纬度，也即iOS设备所获取到的经纬度
+ *  wgs84ll格式的经纬度
  */
 @property (assign, nonatomic) CLLocationCoordinate2D coordinate;
 
@@ -42,5 +39,26 @@
  *  速度，单位为米/秒
  */
 @property (assign, nonatomic) CLLocationSpeed speed;
+
+@property (strong, nonatomic) NSDate* timestamp;
+
+
+
+@end
+
+
+@interface BNHeading : NSObject
+
+@property(assign, nonatomic) CLLocationDirection magneticHeading;
+
+/**
+ *  旋转角精度
+ */
+@property (assign, nonatomic) CLLocationDirection headingAccuracy;
+
+/**
+ *  旋转角度大小，单位位度，范围位0-359.9，0表示正北
+ */
+@property (assign, nonatomic) CLLocationDirection trueHeading;
 
 @end

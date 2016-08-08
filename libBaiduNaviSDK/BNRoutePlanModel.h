@@ -10,6 +10,9 @@
 
 #import <Foundation/Foundation.h>
 
+#import "BNCommonDef.h"
+
+
 /**
  * 坐标系类型
  */
@@ -20,12 +23,12 @@ typedef enum
 }BNCoordinate_Type;
 
 /**
- * 坐标对象
+ *  位置原始坐标
  */
 @interface BNPosition : NSObject
 
 /**
- * 经度
+ *  经度
  */
 @property(nonatomic,assign)double x;
 
@@ -41,50 +44,38 @@ typedef enum
 
 @end
 
+
 /**
- *  路径规划节点对象
+ *  路径规划节点
  */
 @interface BNRoutePlanNode : NSObject
+
 /**
- *  节点位置（经纬度信息）
+ *  位置，原始经纬度信息
  */
-@property(nonatomic,retain)BNPosition* pos;
+@property(nonatomic,strong)BNPosition* pos;
+
 /**
- *  节点描述信息
+ *  城市ID
+ */
+@property(nonatomic,strong)NSString *cityID;
+
+/**
+ *  描述信息（如家，公司，地图上选的点，我的位置等）
  */
 @property(nonatomic,copy)NSString* title;
+
 /**
- *  节点地址信息
+ *  地址信息（如上地十街十号百度大厦）
  */
 @property(nonatomic,copy)NSString* address;
 
 @end
 
 /**
- *  分时段规划，路线的时间对象
- */
-@interface BNaviCalcRouteTime : NSObject
-/**
- *  小时，24小时制，0-23
- */
-@property(nonatomic,assign)int unHour;
-/**
- *  分钟，0-59
- */
-@property(nonatomic,assign)int unMin;
-
-@end
-
-
-/**
  *  每个路段信息
  */
 @interface BNRouteItem : NSObject
-
-/**
- *  机动类型
- */
-//@property(nonatomic,assign)BNavi_Maneuver_Kind_Enum eManeuverKind;
 
 /**
  *  路名
@@ -104,7 +95,7 @@ typedef enum
 /**
  *  交叉路口坐标
  */
-@property(nonatomic,retain)BNPosition* crossPos;
+@property(nonatomic,strong)BNPosition* crossPos;
 
 /**
  *  在路线中的显示点索引
@@ -116,13 +107,17 @@ typedef enum
  */
 @property(nonatomic,assign)int unOutLinkAngle;
 
-//-(id)initWithNE_RouteInfoItem_t:(const NE_RouteInfoItem_t&)stRouteInfoItem;
 @end
 
 /**
  *  路线详情信息
  */
 @interface BNRouteDetailInfo : NSObject
+
+/**
+ *  路线标签
+ */
+@property(nonatomic, assign) int unLabel;
 
 /**
  *  总长度，单位米
@@ -137,16 +132,33 @@ typedef enum
 /**
  *  路段详情列表,每一个元素是BNaviRouteItem类型
  */
-@property(nonatomic,retain)NSArray*  routeItemList;
+@property(nonatomic,strong)NSArray*  routeItemList;
 
 /**
  *  是否包含收费路段
  */
 @property(nonatomic,assign)BOOL bTolled;
 
-//-(id)initWithRouteInfo:(const NE_RouteInfo_t&)stRouteInfo;
 @end
 
+/**
+ *  分时段规划,路线的时间
+ */
+@interface BNaviCalcRouteTime : NSObject
 
+/**
+ *  24小时,0-23
+ */
+@property(nonatomic,assign)int unHour;
 
+/**
+ *  分钟,0-59
+ */
+@property(nonatomic,assign)int unMin;
 
+/**
+ *  是否有效
+ */
+@property(nonatomic,assign)bool bValid;
+
+@end

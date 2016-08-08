@@ -15,7 +15,6 @@
 #import "BNRoutePlanManagerProtocol.h"
 #import "BNStrategyManagerProtocol.h"
 #import "BNLocationManagerProtocol.h"
-#import "BNSoundEventProtocol.h"
 
 
 #define BNCoreServices_Instance ([BNCoreServices GetInstance])
@@ -25,9 +24,13 @@
 #define BNCoreServices_Strategy ([BNCoreServices StrategyService])
 #define BNCoreServices_Location ([BNCoreServices LocationService])
 
+//可以用此方法获取导航页面栈最上层的控制器
+#define BNGetTopVC [BNGetNaviVC topViewController]
+
 
 /**
- *  核心服务类
+ *  @class
+ *  @abstract 核心服务
  */
 @interface BNCoreServices : NSObject
 
@@ -37,6 +40,7 @@
  *  @return BNCoreService单体
  */
 + (BNCoreServices*)GetInstance;
+
 
 /**
  *  释放单体
@@ -56,19 +60,19 @@
 
 /**
  *  启动服务,同步方法,会导致阻塞
- *  @param SoundDelete  ［in］传入遵守BNSoundManagerProtocol的实例
+ *
  *  @return  启动结果
  */
 - (BOOL)startServices;
 
+
 /**
  *  启动服务,异步方法
  *
- *  @param success       启动成功后回调 success block
- *  @param fail          启动失败后回调 fail block
+ *  @param success 启动成功后回调 success block
+ *  @param fail    启动失败后回调 fail block
  */
 -(void)startServicesAsyn:(void (^)(void))success  fail:(void (^)(void))fail;
-
 
 /**
  *  查询引擎是否初始化完成
@@ -82,23 +86,8 @@
  */
 - (void)stopServices;
 
-#pragma mark - 导航SDK各种事件的回调代理
-
-/**
- *  设置导航tts(语音合成器)的声音事件回调处理委托对象
- *
- *  @param ttsEventDelegate 回调处理委托对象
- */
-- (void)setNaviTTSEventDelegate:(id<BNSoundEventDelegate>)ttsEventDelegate;
-
-/**
- *  设置导航tts(语音合成器)播报的延迟时间
- *
- *  @param delayTime 诱导播报的延迟时间, 范围: 0~ 5s
- */
-- (void)setNaviTTSdelayTime:(double)delayTime;
-
 #pragma mark - data type transfer
+
 /**
  *  coordinate conversion
  *
@@ -107,7 +96,6 @@
  *  @return coordinate in BD09ll standard
  */
 - (CLLocationCoordinate2D)convertToBD09MCWithWGS84ll:(CLLocationCoordinate2D)coordinate;
-
 
 #pragma mark - 获取提供各种服务的实体对象
 
@@ -126,16 +114,16 @@
 + (id<BNRoutePlanManagerProtocol>)RoutePlanService;
 
 /**
- *  获取策略管理器，用于调整白天黑夜策略、播报模式等
+ *  获取策略管理器，用于调整在离线策略、白天黑夜策略、横竖向切换策略等等
  *
  *  @return 策略管理器
  */
 + (id<BNStrategyManagerProtocol>)StrategyService;
 
 /**
- *  获取位置管理器，用于外部gps导航
+ *  获取定位服务器，用于获取当前定位
  *
- *  @return 位置管理器
+ *  @return 定位服务器
  */
 + (id<BNLocationManagerProtocol>)LocationService;
 
