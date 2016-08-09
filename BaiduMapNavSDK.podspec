@@ -7,7 +7,7 @@
 
 Pod::Spec.new do |s|
 s.name             = "BaiduMapNavSDK"
-s.version          = "3.0.1"
+s.version          = "3.0.1.0"
 s.summary          = "BaiduMapNavSDK for cocoapods convenience"
 s.homepage         = "http://lbsyun.baidu.com/index.php?title=ios-navsdk"
 s.license          = { :type => 'MIT', :text => <<-LICENSE
